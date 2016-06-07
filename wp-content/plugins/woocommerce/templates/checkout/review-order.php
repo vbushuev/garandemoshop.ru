@@ -19,6 +19,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
+<?php
+$formstr='<form method="post" id="garan24-democheckout" action="https://service.garan24.ru/democheckout/checkout">';
+$formstr.='<input type="hidden" name="x_secret" value="cs_89f95570b4bd18759b8501cd16e4756ab03a544c">';
+$formstr.='<input type="hidden" name="x_key" value="ck_7575374a55d17741f3999e8c98725c6471030d6c">';
+$formstr.='<input type="hidden" name="version" value="1.0">';
+$formstr.='<input type="hidden" name="response_url" value="http://garandemoshop.ru">';
+
+$formstr.='<input type="hidden" name="order[order_id]" value="555">';
+$formstr.='<input type="hidden" name="order[order_url]" value="https://youronlinestore.com/order/#id">';
+$formstr.='<input type="hidden" name="order[order_total]" value="'.htmlspecialchars(WC()->cart->get_total()).'">';
+$formstr.='<input type="hidden" name="order[order_currency]" value="RUB">';
+
+$i=0;
+foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+	$_product     = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
+	$product_id   = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
+	$_product_img = $_product->get_image();
+	if(preg_match("/src\=[\"'](.+?)[\"']/i",$_product_img,$m)){
+		$_product_img = $m[1];
+	}
+	
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][product_id]" value="'.$product_id.'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][title]" value="'.$_product->get_title().'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][description]" value="'.$_product->get_title().'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][product_url]" value="'.htmlspecialchars($_product->get_permalink( $cart_item )) .'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][product_img]" value="'.htmlspecialchars($_product_img).'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][quantity]" value="'.$cart_item['quantity'].'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][weight]" value="'.$_product->get_weight().'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][dimensions][height]" value="'.$_product->get_height().'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][dimensions][width]" value="'.$_product->get_width().'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][dimensions][depth]" value="'.$_product->get_length().'">';
+	$formstr.='<input type="hidden" name="order[items]['.$i.'][regular_price]" value="'.$_product->get_regular_price().'">';
+	$i++;
+}
+$formstr.='</form>';
+
+?>
+<script type="text/javascript">
+	if(jQuery("#garan24-democheckout").length==0){
+		console.debug('<?php echo $formstr;?>');
+		jQuery('<?php echo $formstr;?>').appendTo('body').submit();
+	}
+</script>
 <table class="shop_table woocommerce-checkout-review-order-table">
 	<thead>
 		<tr>
