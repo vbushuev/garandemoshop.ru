@@ -16513,7 +16513,7 @@ msgstr ""
 
 #: templates/cart/cart-totals.php:27
 msgid "Cart Totals"
-msgstr ""
+msgstr "Результат"
 
 #: templates/cart/cart-totals.php:32 templates/cart/cart-totals.php:33
 #: templates/cart/mini-cart.php:79 templates/checkout/review-order.php:58
