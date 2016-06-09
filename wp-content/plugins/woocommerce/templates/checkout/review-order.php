@@ -20,15 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <?php
+$_order_total = WC()->cart->get_total();
+if(preg_match('/\<span\s*class\="amount"\>(.+?)\</i',$_order_total,$m)){
+	$_order_total = $m[1];
+}
 $formstr='<form method="post" id="garan24-democheckout" action="https://service.garan24.ru/democheckout/checkout">';
-$formstr.='<input type="hidden" name="x_secret" value="cs_89f95570b4bd18759b8501cd16e4756ab03a544c">';
-$formstr.='<input type="hidden" name="x_key" value="ck_7575374a55d17741f3999e8c98725c6471030d6c">';
+$formstr.='<input type="hidden" name="x_secret" value="cs_6fe8837da7fbc5a9c7d242e5741ca0a431dc533b">';
+$formstr.='<input type="hidden" name="x_key" value="ck_3dbb47baeb9b805dc48074dbb33f140c904f8901">';
 $formstr.='<input type="hidden" name="version" value="1.0">';
 $formstr.='<input type="hidden" name="response_url" value="http://garandemoshop.ru">';
 
 $formstr.='<input type="hidden" name="order[order_id]" value="555">';
 $formstr.='<input type="hidden" name="order[order_url]" value="https://youronlinestore.com/order/#id">';
-$formstr.='<input type="hidden" name="order[order_total]" value="'.htmlspecialchars(WC()->cart->get_total()).'">';
+$formstr.='<input type="hidden" name="order[order_total]" value="'.$_order_total.'">';
 $formstr.='<input type="hidden" name="order[order_currency]" value="RUB">';
 
 $i=0;
@@ -36,10 +40,11 @@ foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
 	$_product     = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 	$product_id   = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
 	$_product_img = $_product->get_image();
+
 	if(preg_match("/src\=[\"'](.+?)[\"']/i",$_product_img,$m)){
 		$_product_img = $m[1];
 	}
-	
+
 	$formstr.='<input type="hidden" name="order[items]['.$i.'][product_id]" value="'.$product_id.'">';
 	$formstr.='<input type="hidden" name="order[items]['.$i.'][title]" value="'.$_product->get_title().'">';
 	$formstr.='<input type="hidden" name="order[items]['.$i.'][description]" value="'.$_product->get_title().'">';
